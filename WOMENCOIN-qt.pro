@@ -25,6 +25,20 @@ OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
 
+win32 {
+  BOOST_THREAD_LIB_SUFFIX=
+  BOOST_INCLUDE_PATH=C:/devel/boost_1_55_0
+  BOOST_LIB_PATH=C:/devel/boost_1_55_0/stage/lib
+  BDB_INCLUDE_PATH=C:/devel/db-4.8.30
+  BDB_LIB_PATH=C:/devel/db-4.8.30
+  OPENSSL_INCLUDE_PATH=C:/devel/openssl-1.0.2o/include
+  OPENSSL_LIB_PATH=C:/devel/openssl-1.0.2o
+  MINIUPNPC_INCLUDE_PATH=C:/devel/miniupnpc-1.9
+  MINIUPNPC_LIB_PATH=C:/devel/miniupnpc-1.9
+  QRENCODE_INCLUDE_PATH=C:/devel/qrencode-3.4.4
+  QRENCODE_LIB_PATH=C:/devel/qrencode-3.4.4/.libs
+}
+
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     # Mac
@@ -35,7 +49,7 @@ contains(RELEASE, 1) {
 
     !windows:!macx {
         # Linux: static link
-        LIBS += -Wl,-Bstatic
+        # LIBS += -Wl,-Bstatic
     }
 }
 
@@ -48,7 +62,7 @@ QMAKE_LFLAGS *= -fstack-protector-all --param ssp-buffer-size=1
 }
 # for extra security on Windows: enable ASLR and DEP via GCC linker flags
 win32:QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--nxcompat
-win32:QMAKE_LFLAGS += -static-libgcc -static-libstdc++
+win32:QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
 
 # use: qmake "USE_QRCODE=1"
 # libqrencode (http://fukuchi.org/works/qrencode/index.en.html) must be installed for support
@@ -69,7 +83,7 @@ contains(USE_UPNP, -) {
     count(USE_UPNP, 0) {
         USE_UPNP=1
     }
-    DEFINES += USE_UPNP=$$USE_UPNP STATICLIB
+    DEFINES += USE_UPNP=$$USE_UPNP MINIUPNP_STATICLIB STATICLIB
     INCLUDEPATH += $$MINIUPNPC_INCLUDE_PATH
     LIBS += $$join(MINIUPNPC_LIB_PATH,,-L,) -lminiupnpc
     win32:LIBS += -liphlpapi
@@ -360,13 +374,7 @@ OTHER_FILES += \
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
     macx:BOOST_LIB_SUFFIX = -mt
-    windows:BOOST_LIB_SUFFIX = -mgw63-mt-s-1_55
-}
-
-# platform specific defaults, if not overridden on command line
-isEmpty(BOOST_LIB_SUFFIX) {
-    macx:BOOST_LIB_SUFFIX = -mt
-    windows:BOOST_LIB_SUFFIX = -mt
+    windows:BOOST_LIB_SUFFIX = -mgw73-mt-s-1_55
 }
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {
@@ -375,48 +383,39 @@ isEmpty(BOOST_THREAD_LIB_SUFFIX) {
 }
 
 isEmpty(BDB_LIB_PATH) {
-    macx:BDB_LIB_PATH = /opt/local/lib/db48
-    windows:BDB_LIB_PATH = C:\legends\db-4.8.30.NC\build_unix
+    windows:BDB_LIB_PATH = C:\womencoin\db-4.8.30.NC\build_unix
 }
 
 isEmpty(BDB_LIB_SUFFIX) {
-    macx:BDB_LIB_SUFFIX = -4.8
     windows:BDB_LIB_SUFFIX = -4.8
 }
 
 isEmpty(BDB_INCLUDE_PATH) {
-    macx:BDB_INCLUDE_PATH = /opt/local/include/db48
-    windows:BDB_INCLUDE_PATH = C:\legends\db-4.8.30.NC\build_unix
+    windows:BDB_INCLUDE_PATH = C:\womencoin\db-4.8.30.NC\build_unix
 }
 
 isEmpty(OPENSSL_LIB_PATH) {
-    macx:OPENSSL_LIB_PATH = /opt/local/lib
-    windows:OPENSSL_LIB_PATH = C:\legends\openssl-1.0.2o
+    windows:OPENSSL_LIB_PATH = C:\womencoin\openssl-1.0.2o
 }
 
 isEmpty(OPENSSL_INCLUDE_PATH) {
-    macx:OPENSSL_INCLUDE_PATH = /opt/local/include/openssl
-    windows:OPENSSL_INCLUDE_PATH = C:\legends\openssl-1.0.2o\include
+    windows:OPENSSL_INCLUDE_PATH = C:\womencoin\openssl-1.0.2o\include
 }
 
 isEmpty(BOOST_LIB_PATH) {
-    macx:BOOST_LIB_PATH = /opt/local/lib
-    windows:BOOST_LIB_PATH = C:\legends\boost_1_55_0\boost_1_55_0\stage\lib
+    windows:BOOST_LIB_PATH = C:\womencoin\boost_1_55_0\boost_1_55_0\stage\lib
 }
 
 isEmpty(BOOST_INCLUDE_PATH) {
-    macx:BOOST_INCLUDE_PATH = /opt/local/include
-    windows:BOOST_INCLUDE_PATH = C:\legends\boost_1_55_0\boost_1_55_0
+    windows:BOOST_INCLUDE_PATH = C:\womencoin\boost_1_55_0\boost_1_55_0
 }
 
 isEmpty(MINIUPNPC_LIB_PATH) {
-    macx:MINIUPNPC_LIB_PATH=/opt/local/lib
-    windows:MINIUPNPC_LIB_PATH = C:\legends\miniupnpc
+    windows:MINIUPNPC_LIB_PATH = C:\womencoin\miniupnpc
 }
 
 isEmpty(MINIUPNPC_INCLUDE_PATH) {
-    macx:MINIUPNPC_INCLUDE_PATH=/opt/local/include/miniupnpc
-    windows:MINIUPNPC_INCLUDE_PATH = C:\legends\miniupnpc
+    windows:MINIUPNPC_INCLUDE_PATH = C:\womencoin\miniupnpc
 }
 
 windows:DEFINES += WIN32
